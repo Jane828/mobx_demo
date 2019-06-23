@@ -1,19 +1,19 @@
-import {observable, computed, autorun, when, reaction, action, runInAction} from 'mobx';
+// import {observable, computed, autorun, when, reaction, action, runInAction} from 'mobx';
 
-class Store {
-    @observable string = 'Hello'
-    @observable num = 20
-    @observable bool = false
-    @computed get mixed(){
-        return this.string + '/' + this.num
-    }
-    @action.bound fn(){
-        this.string = 'winer';
-        this.num = 1314;
-    }
-}
+// class Store {
+//     @observable string = 'Hello'
+//     @observable num = 20
+//     @observable bool = false
+//     @computed get mixed(){
+//         return this.string + '/' + this.num
+//     }
+//     @action.bound fn(){
+//         this.string = 'winer';
+//         this.num = 1314;
+//     }
+// }
 
-const store = new Store();
+// const store = new Store();
 
 // 1. computed (将多个可观察数据组合成一个可观察数据)
 // @computed get mixed(){
@@ -39,18 +39,20 @@ const store = new Store();
 // console.log('-------------')
 // store.bool = true  -----> 输出 it is changed to true
 
-// 4. reactin (在可观察数据string和num没有被改变之前，reaction不会执行，一旦被改变则执行reaction，所以reaction常用于：当没有初始数据时，不会调用写缓存的逻辑，可以用reaction实现在数据第一次被填充之后才启用写缓存的逻辑)
-reaction(()=>[store.string, store.num], arr=>console.log(arr.join('/')))
+// 4. reaction (在可观察数据string和num没有被改变之前，reaction不会执行，一旦可观察数据被改变则执行reaction，所以reaction常用于：当没有初始数据时，不会调用写缓存的逻辑，可以用reaction实现在数据第一次被填充之后才启用写缓存的逻辑)
+// reaction(()=>[store.string, store.num], arr=>console.log(arr.join('/')))
 // store.num = 1000;
 // store.string = 'http';
 
-// 5.action 只触发一次，适用于多次重复修改状态的逻辑场景
+// 5.action 用于改变可观察数据的动作，只触发一次，适用于多次重复修改状态的逻辑场景
 // const fn = store.fn
 // fn的this指向通过bound绑定为store, 而不是window
 // fn()
 
 // 6. runInAction (等价于action.bound)
-runInAction(()=>{
-    store.string = 'winer';
-    store.num = 1314;
-})
+// runInAction(()=>{
+//     store.string = 'winer';
+//     store.num = 1314;
+// })
+
+// 'mobx-react' 中的observer可以将所修饰的react组件中的render()方法包装成autorun()
